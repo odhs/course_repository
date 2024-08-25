@@ -28,6 +28,11 @@ npm i tailwindcss postcss autoprefixer -D
 npx tailwindcss init -p
 ```
 
+```bs
+npm i react-router-dom
+npm i lucide-react
+```
+
 ## Para iniciar a aplicação use
 
 ```bs
