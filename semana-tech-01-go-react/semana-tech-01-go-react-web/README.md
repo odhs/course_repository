@@ -1,54 +1,66 @@
-# Iniciando a aplicação
+# Ask Me Anything builded in Go + React
+
+## Steps in Development
+
+### Vite
 
 ```bs
 npm create vite@latest
 ```
 
-Selecione:
+Select:
 
 - web
 - REACT
 - Typescript
 
-Entra na pasta e roda no VSCode
+Enter in directory an run in VSCode
 
 ```bs
 cd web
 code .
 ```
 
-Instalando as dependências
+Install Dependences
 
 ```bs
 npm i
 ```
 
-Adicionando o CSS
+### CSS
+
+Add the CSS framework
 
 ```bs
 npm i tailwindcss postcss autoprefixer -D
 npx tailwindcss init -p
 ```
 
-Instalando o roteador
+### Router
+
+Install the router
 
 ```bs
 npm i react-router-dom
 ```
 
-Adicionando ícone
+### Icons
+
+Add icons package
 
 ```bs
 npm i lucide-react
 ```
 
-Migrando para REACT 19
+### Migrating to React 19
+
+To get the form parameters with new feature of React 19
 
 ```bs
 npm install --save-exact react@rc react-dom@rc
 ```
 
-1 Substituir no package.json:
+1 Replace in package.json:
 
 ```json
   "devDependencies": {
@@ -58,7 +70,7 @@ npm install --save-exact react@rc react-dom@rc
   }
 ```
 
-2 Adicionar no package.json
+2 Add to package.json
 
 ```json
   "overrides": {
@@ -67,14 +79,22 @@ npm install --save-exact react@rc react-dom@rc
   }
 ```
 
-3 Deletar:
+3 Delete:
 
-- pasta: node_modules
-- arquivo: package-lock.json
+- directory: node_modules
+- file: package-lock.json
 
-4: Executar `npm i -f` para instalar tudo
+4: To execute `npm i -f` to install everything
 
-## Para iniciar a aplicação use
+### Instaling Sonner to show a Toaster
+
+To show messages to the user, -f because we are using React 19 and this version is in release candidate yet. The function was added to the Sharing Button in Room page.
+
+```bs
+npm i sonner -f
+```
+
+## To start the application use
 
 ```bs
 npm run dev

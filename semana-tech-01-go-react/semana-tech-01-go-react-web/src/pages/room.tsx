@@ -1,19 +1,22 @@
 import { useParams } from "react-router-dom";
 import { ArrowRight, ArrowUp, Share2 } from "lucide-react";
+import { toast } from "sonner";
 
 import amaLogo from "../assets/ama-logo.svg";
 
 export function Room() {
   // Return all parameters from URL
-  const { roomId } = useParams();
+  const { roomId } = useParams()
 
   function handleShareRoom() {
     const url = window.location.href.toString();
 
     if (navigator.share != undefined && navigator.canShare()) {
-      navigator.share({ url });
+      navigator.share({ url })
     } else {
-      navigator.clipboard.writeText(url);
+      navigator.clipboard.writeText(url)
+
+      toast.info('The room URL was copied to your clipboard!')
     }
   }
 
