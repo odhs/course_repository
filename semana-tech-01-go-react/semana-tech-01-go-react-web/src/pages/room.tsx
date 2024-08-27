@@ -1,22 +1,23 @@
 import { useParams } from "react-router-dom";
-import { ArrowRight, ArrowUp, Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { Message } from "../components/message";
 
 import amaLogo from "../assets/ama-logo.svg";
+import { ArrowRight, Share2 } from "lucide-react";
 
 export function Room() {
   // Return all parameters from URL
-  const { roomId } = useParams()
+  const { roomId } = useParams();
 
   function handleShareRoom() {
     const url = window.location.href.toString();
 
     if (navigator.share != undefined && navigator.canShare()) {
-      navigator.share({ url })
+      navigator.share({ url });
     } else {
-      navigator.clipboard.writeText(url)
+      navigator.clipboard.writeText(url);
 
-      toast.info('The room URL was copied to your clipboard!')
+      toast.info("The room URL was copied to your clipboard!");
     }
   }
 
@@ -60,27 +61,8 @@ export function Room() {
       </form>
 
       <ol className="list-decimal list-inside px-3 space-y-8">
-        <li className="ml-4 leading-relaxed text-zinc-100">
-          Text
-          <button
-            type="button"
-            className="mt-3 flex items-center gap-2 text-orange-400 text-sm font-medium hover:text-orange-500"
-          >
-            <ArrowUp className="size-4" />
-            Curtir pergunta (123)
-          </button>
-        </li>
-
-        <li className="ml-4 leading-relaxed text-zinc-100">
-          Text
-          <button
-            type="button"
-            className="mt-3 flex items-center gap-2 text-zinc-400 text-sm font-medium hover:text-zinc-300"
-          >
-            <ArrowUp className="size-4" />
-            Curtir pergunta (123)
-          </button>
-        </li>
+        <Message text="Example of Text 1" amountOfReactions={2} answered />
+        <Message text="Example of Text 2 " amountOfReactions={10} />
       </ol>
     </div>
   );
