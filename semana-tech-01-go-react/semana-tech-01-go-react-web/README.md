@@ -14,13 +14,6 @@ Select:
 - REACT
 - Typescript
 
-Enter in directory an run in VSCode
-
-```bs
-cd web
-code .
-```
-
 Install Dependences
 
 ```bs
@@ -84,9 +77,9 @@ npm install --save-exact react@rc react-dom@rc
 - directory: node_modules
 - file: package-lock.json
 
-4: To execute `npm i -f` to install everything
+4: Execute `npm i -f` to install everything
 
-### Instaling Sonner to show a Toaster
+### Instaling package Sonner to show a toaster
 
 To show messages to the user, -f because we are using React 19 and this version is in release candidate yet. The function was added to the Sharing Button in Room page.
 
