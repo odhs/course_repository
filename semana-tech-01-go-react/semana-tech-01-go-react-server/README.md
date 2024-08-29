@@ -76,7 +76,11 @@ Then run the tool `tern` to create the files to migrations
 
 ```sh
 tern init ./internal/store/pgstore/migrations
+```
 
+Delete the file .sql in the `/internal/store/pgstore/migrations` and create new ones.
+
+```sh
 tern new --migrations ./internal/store/pgstore/migrations create_rooms_table
 
 tern new --migrations ./internal/store/pgstore/migrations create_messages_table
@@ -96,10 +100,41 @@ CREATE TABLE IF NOT EXISTS rooms (
 DROP TABLE IF EXISTS rooms;
 ```
 
+```sql
+The content of the `001_create_messsages_table.sql` is:
+
+CREATE TABLE IF NOT EXISTS messages(
+	"id" 				uuid	PRIMARY KEY 	NOT NULL	DEFAULT gen_random_uuid(),
+	"room_id"			uuid					NOT NULL,
+	"message"			VARCHAR(255)			NOT NULL,
+	"reaction_count"	BIGINT					NOT NULL 	DEFAULT 0,
+	"answered"			BOOLEAN					NOT NULL 	DEFAULT false,
+	FOREIGN KEY (room_id) REFERENCES rooms(id)
+) 
+
+---- create above / drop below ----
+
+DROP TABLE IF EXISTS messages;
+```
+
 ### Install the package SQLC
 
-SQLC to generates 
+SQLC to generates the library to access the database
 
 ```sh
-go install github.com/sqlc/cmd/sqlc@latest
+ go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+```
+
+Creates the config file `sqlc.yaml` in `pgstore` dir and
+the file `./internal/pgstore/queries/queries.sql` with the content:
+
+```sql
+-- name: GetRoom :one
+SELECT "id", "theme" FROM rooms WHERE id = $id;
+```
+
+Run SQLC
+
+```sh
+sqlc generate -f ./internal/store/pgstore/sqlc.yaml
 ```
