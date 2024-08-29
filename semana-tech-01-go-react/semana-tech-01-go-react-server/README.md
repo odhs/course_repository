@@ -46,7 +46,7 @@ Check if it is working
 go version
 ```
 
-# Development Steps
+# Foundation - Development Steps
 
 In the application directory of the application:
 
@@ -119,13 +119,13 @@ DROP TABLE IF EXISTS messages;
 
 ### Install the package SQLC
 
-SQLC to generates the library to access the database
+1. SQLC to generates the library to access the database
 
 ```sh
  go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 ```
 
-Creates the config file `sqlc.yaml` in `pgstore` dir and
+2. Creates the config file `sqlc.yaml` in `pgstore` dir and
 the file `./internal/pgstore/queries/queries.sql` with the content:
 
 ```sql
@@ -133,8 +133,24 @@ the file `./internal/pgstore/queries/queries.sql` with the content:
 SELECT "id", "theme" FROM rooms WHERE id = $id;
 ```
 
-Run SQLC
+Other SQL was added laterin the queries.sql
+
+3. Run SQLC
 
 ```sh
 sqlc generate -f ./internal/store/pgstore/sqlc.yaml
 ```
+
+## Automate Tern and SQLC
+
+To automatically run the **Tern** and **SQLC** with the **GO Generate** tool the file `gen.go` was created at the root of the project with the content:
+
+```go
+//go:generate go run ./cmd/tools/terndotenv/main.go
+//go:generate sqlc generate -f ./internal/store/pgstore/sqlc.yaml
+```
+
+So when executing `GO GENERATE./...` everything will be executed.
+
+
+
