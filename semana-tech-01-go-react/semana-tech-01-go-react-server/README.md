@@ -1,5 +1,21 @@
 # Server Project Setup
 
+## The Environment
+
+The environment is defined in `compose.yml` to run with **Docker**, the are a **PostgresSQL** database and a **PG Admin**, to manage the database in address `localhost:8081`.
+
+To start the environment use:
+
+```sh
+docker compose start
+```
+
+Or if you want to see the log, but you will not be able to use the terminal at sametime to develop, use:
+
+```sh
+docker compose up
+```
+
 ## Install Golang in Ubuntu
 
 Download Golang
