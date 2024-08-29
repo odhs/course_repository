@@ -54,13 +54,17 @@ In the application directory of the application:
 go mod init odhs/semana-tech-01-go-react-server-main
 ```
 
-Install a tool to migrations
+## Migrations
+
+### Tern tool 
+
+Install the tern package for use with migrations
 
 ```sh
 go install github.com/jackc/tern/v2@latest
 ```
 
-Creating the dir internal
+Create the internal directory
 
 The internal directory contains all the software that is internal to your own package and that will not be imported as a dependency.
 
@@ -78,9 +82,9 @@ tern new --migrations ./internal/store/pgstore/migrations create_rooms_table
 tern new --migrations ./internal/store/pgstore/migrations create_messages_table
 ```
 
-The content of the 001_create_rooms_table.sql is:
+The content of the `001_create_rooms_table.sql` is:
 
-```sh
+```sql
 001 
 CREATE TABLE IF NOT EXISTS rooms (
  "id" uuid  PRIMARY KEY  NOT NULL DEFAULT gen_random_uuid(),
@@ -90,4 +94,12 @@ CREATE TABLE IF NOT EXISTS rooms (
 ---- create above / drop below ----
 
 DROP TABLE IF EXISTS rooms;
+```
+
+### Install the package SQLC
+
+SQLC to generates 
+
+```sh
+go install github.com/sqlc/cmd/sqlc@latest
 ```
