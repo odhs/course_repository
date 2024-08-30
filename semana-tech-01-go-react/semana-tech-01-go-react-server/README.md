@@ -152,5 +152,6 @@ To automatically run the **Tern** and **SQLC** with the **GO Generate** tool the
 
 So when executing `GO GENERATE./...` everything will be executed.
 
+# API - Development Steps
 
-
+The API handle was created in the internal/api directory
