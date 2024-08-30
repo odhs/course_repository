@@ -7,10 +7,12 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 )
 
 type apiHandler struct {
-	// Concrete mode, because this app is simple, not necessary a interface
+	// Concrete mode with pgstore, because this app is simple,
+	// not necessary an interface to attach another database if necessary.
 	q *pgstore.Queries
 	r *chi.Mux
 }
@@ -30,6 +32,18 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 
 	// Middlewares
 	r.Use(middleware.RequestID, middleware.Recoverer, middleware.Logger)
+
+	// Basic CORS
+	r.Use(cors.Handler(cors.Options{
+		// On the production site, the following line can specify the allowed sites
+		AllowedOrigins: []string{"https://*", "http://*"},
+		// OPTIONS is important because is used by the CORS, the others are to the API
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	}))
 
 	// Routes
 	r.Route("/api", func(r chi.Router) {
@@ -55,6 +69,7 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 	return apiH
 }
 
+func (h apiHandler) handleSubscribe(w http.ResponseWriter, r *http.Request)              {}
 func (h apiHandler) handleCreateRoom(w http.ResponseWriter, r *http.Request)             {}
 func (h apiHandler) handleGetRooms(w http.ResponseWriter, r *http.Request)               {}
 func (h apiHandler) handleCreateRoomMessage(w http.ResponseWriter, r *http.Request)      {}

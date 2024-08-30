@@ -155,3 +155,9 @@ So when executing `GO GENERATE./...` everything will be executed.
 # API - Development Steps
 
 The API handle was created in the internal/api directory
+
+## Add Chi
+
+## Add Chi CORS 
+
+go get github.com/go-chi/cors
