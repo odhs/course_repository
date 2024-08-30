@@ -45,6 +45,9 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 		MaxAge:           300,
 	}))
 
+	// Websocket
+	r.Get("/subscribe/{room_id}", apiH.handleSubscribe)
+
 	// Routes
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/rooms", func(r chi.Router) {
