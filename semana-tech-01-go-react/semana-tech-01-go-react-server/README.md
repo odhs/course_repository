@@ -158,6 +158,8 @@ The API handle was created in the internal/api directory
 
 ## Add Chi
 
+github.com/go-chi/chi/v5
+
 ## Add Chi CORS 
 
 go get github.com/go-chi/cors

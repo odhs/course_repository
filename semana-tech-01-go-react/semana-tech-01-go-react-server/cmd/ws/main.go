@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"odhs/semana-tech-01-go-react-server-main/internal/api"
 	"odhs/semana-tech-01-go-react-server-main/internal/store/pgstore"
@@ -51,6 +52,8 @@ func main() {
 			}
 		}
 	}()
+
+	slog.Info("Server started")
 
 	// Create a channel to receive the signal Ctrl+C
 	quit := make(chan os.Signal, 1)

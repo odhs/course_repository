@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -25,7 +26,7 @@ type apiHandler struct {
 	r        *chi.Mux
 	upgrader websocket.Upgrader
 	// Pool de Conexões para clientes conectados via WebSocket
-	// map[roomId] por map[clientes conectados]
+	// map[roomId] por map[clientes conectados] retornando uma função Cancel
 	subscribers map[string]map[*websocket.Conn]context.CancelFunc
 	// Blocks data race
 	mu *sync.Mutex
@@ -91,6 +92,40 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 	return apiH
 }
 
+const (
+	MessageKindMessageCreated = "message_created"
+)
+
+type Message struct {
+	Kind   string `json:"Kind"`
+	Value  any    `json:"value"` /* Value it will be a MessageMessageCreated */
+	RoomID string `json:"-"`     /* "-" = Don't encode RoomID */
+}
+
+type MessageMessageCreated struct {
+	ID      string
+	Message string
+}
+
+func (h apiHandler) notifyClients(msg Message) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	subscribers, ok := h.subscribers[msg.RoomID]
+	if !ok || len(subscribers) == 0 {
+		return
+	}
+
+	for conn, cancel := range subscribers {
+		if err := conn.WriteJSON(msg); err != nil {
+			slog.Error("failed to send message to client", "error", err)
+			// o cliente não existe mais então vamos cancelar o contexto,
+			// que por sua vez irá cancelar a conexão e retirar o subscriber do pool
+			cancel()
+		}
+	}
+}
+
 /*
 handleSubscribe
 - It is a function that blocks execution because it maintains the connection
@@ -129,13 +164,13 @@ func (h apiHandler) handleSubscribe(w http.ResponseWriter, r *http.Request) {
 	}
 	defer c.Close()
 
-	// Contexto com a função cancel, para poder liberar a função caso a conexão
-	// seja interrompida.
+	// Context with the Cancel function, to be able to release the function if
+	// the connection be interrupted.
 	ctx, cancel := context.WithCancel(r.Context())
 
-	// Atualizando o mapa de clientes com o novo subscriber que acabou de chegar
-	// Se ainda não existir o websocket da sala cria
-	// Se já existir apenas atribui a função "cancel".
+	// Updating the customer map with the new subscriber that has just arrived
+	// If room not exists webSocket it will be created
+	// If room exists already only attributes the "CANCEL" function.
 	h.mu.Lock()
 	if _, ok := h.subscribers[rawRoomID]; !ok {
 		h.subscribers[rawRoomID] = make(map[*websocket.Conn]context.CancelFunc)
@@ -160,9 +195,95 @@ func (h apiHandler) handleSubscribe(w http.ResponseWriter, r *http.Request) {
 	h.mu.Unlock()
 }
 
-func (h apiHandler) handleCreateRoom(w http.ResponseWriter, r *http.Request)             {}
-func (h apiHandler) handleGetRooms(w http.ResponseWriter, r *http.Request)               {}
-func (h apiHandler) handleCreateRoomMessage(w http.ResponseWriter, r *http.Request)      {}
+func (h apiHandler) handleCreateRoom(w http.ResponseWriter, r *http.Request) {
+	type _body struct {
+		Theme string `json:"theme"`
+	}
+	var body _body
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "invalid json", http.StatusBadRequest)
+	}
+
+	roomID, err := h.q.InsertRoom(r.Context(), body.Theme)
+	if err != nil {
+		slog.Error("failed to insert room", "error", err)
+		http.Error(w, "something went wrong", http.StatusInternalServerError)
+	}
+
+	type response struct {
+		ID string `json:"id"`
+	}
+
+	// erros ignorados por hora porque eu sei que a codificação para essa estrutura não irá falhar
+	data, _ := json.Marshal(response{ID: roomID.String()})
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write(data)
+
+}
+
+func (h apiHandler) handleGetRooms(w http.ResponseWriter, r *http.Request) {}
+
+func (h apiHandler) handleCreateRoomMessage(w http.ResponseWriter, r *http.Request) {
+	// Get and check for valid room ID
+	rawRoomID := chi.URLParam(r, "room_id")
+	roomID, err := uuid.Parse(rawRoomID)
+	if err != nil {
+		http.Error(w, "invalid room id", http.StatusBadRequest)
+	}
+
+	// Verify if room exists
+	_, err = h.q.GetRoom(r.Context(), roomID)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			http.Error(w, "room not found", http.StatusBadRequest)
+			return
+		}
+		http.Error(w, "something went wrong", http.StatusInternalServerError)
+		return
+	}
+
+	type _body struct {
+		Message string `json:"message"`
+	}
+	var body _body
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "invalid json", http.StatusBadRequest)
+	}
+
+	messageID, err := h.q.InsertMessage(
+		r.Context(),
+		pgstore.InsertMessageParams{
+			RoomID:  roomID,
+			Message: body.Message,
+		},
+	)
+	if err != nil {
+		slog.Error("failed to insert message", "error", err)
+		http.Error(w, "something went wrong", http.StatusInternalServerError)
+	}
+
+	type response struct {
+		ID string `json:"id"`
+	}
+
+	// erros ignorados por hora porque eu sei que a codificação para essa estrutura não irá falhar
+	data, _ := json.Marshal(response{ID: messageID.String()})
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write(data)
+
+	go h.notifyClients(
+		Message{
+			Kind:   MessageKindMessageCreated,
+			RoomID: rawRoomID,
+			Value: MessageMessageCreated{
+				ID:      messageID.String(),
+				Message: body.Message,
+			},
+		},
+	)
+
+}
 func (h apiHandler) handleGetRoomMessages(w http.ResponseWriter, r *http.Request)        {}
 func (h apiHandler) handleGetRoomMessage(w http.ResponseWriter, r *http.Request)         {}
 func (h apiHandler) handleReactToMessage(w http.ResponseWriter, r *http.Request)         {}
