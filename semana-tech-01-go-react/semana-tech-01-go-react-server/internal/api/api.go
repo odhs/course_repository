@@ -38,7 +38,7 @@ func (h apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewHandler(q *pgstore.Queries) http.Handler {
-	apiH := apiHandler{
+	a := apiHandler{
 		q: q,
 		upgrader: websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
@@ -66,45 +66,64 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 	}))
 
 	// Websocket
-	r.Get("/subscribe/{room_id}", apiH.handleSubscribe)
+	r.Get("/subscribe/{room_id}", a.handleSubscribe)
 
 	// Routes
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/rooms", func(r chi.Router) {
-			r.Post("/", apiH.handleCreateRoom)
-			r.Get("/", apiH.handleGetRooms)
+			r.Post("/", a.handleCreateRoom)
+			r.Get("/", a.handleGetRooms)
 
 			r.Route("/{room_id}/messages", func(r chi.Router) {
-				r.Post("/", apiH.handleCreateRoomMessage)
-				r.Get("/", apiH.handleGetRoomMessages)
+				r.Post("/", a.handleCreateRoomMessage)
+				r.Get("/", a.handleGetRoomMessages)
 
 				r.Route("/{message_id}", func(r chi.Router) {
-					r.Get("/", apiH.handleGetRoomMessage)
-					r.Patch("/react", apiH.handleReactToMessage)
-					r.Delete("/react", apiH.handleRemoveReactFromMessage)
-					r.Patch("/answer", apiH.handleMarkMessageAnswered)
+					r.Get("/", a.handleGetRoomMessage)
+					r.Patch("/react", a.handleReactToMessage)
+					r.Delete("/react", a.handleRemoveReactFromMessage)
+					r.Patch("/answer", a.handleMarkMessageAnswered)
 				})
 			})
 		})
 	})
 
-	apiH.r = r
-	return apiH
+	a.r = r
+	return a
 }
 
 const (
-	MessageKindMessageCreated = "message_created"
+	MessageKindMessageCreated          = "message_created"
+	MessageKindMessageRactionIncreased = "message_reaction_increased"
+	MessageKindMessageRactionDecreased = "message_reaction_decreased"
+	MessageKindMessageAnswered         = "message_answered"
 )
 
-type Message struct {
-	Kind   string `json:"Kind"`
-	Value  any    `json:"value"` /* Value it will be a MessageMessageCreated */
-	RoomID string `json:"-"`     /* "-" = Don't encode RoomID */
+type MessageMessageReactionIncreased struct {
+	ID    string `json:"id"`
+	Count int64  `json:"count"`
+}
+
+type MessageMessageReactionDecreased struct {
+	ID    string `json:"id"`
+	Count int64  `json:"count"`
+}
+
+type MessageMessageAnswered struct {
+	ID string `json:"id"`
 }
 
 type MessageMessageCreated struct {
-	ID      string
-	Message string
+	ID      string `json:"id"`
+	Message string `json:"message"`
+}
+
+type Message struct {
+	Kind string `json:"kind"`
+	/* Value it will be a MessageMessageCreated */
+	Value any `json:"value"`
+	/* "-" = Don't encode RoomID */
+	RoomID string `json:"-"`
 }
 
 func (h apiHandler) notifyClients(msg Message) {
