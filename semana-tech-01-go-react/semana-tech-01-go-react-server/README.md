@@ -1,4 +1,4 @@
-# Server Project Setup
+# Server-side Project Setup
 
 To run the project use:
 
@@ -8,9 +8,11 @@ go run cmd/ws/main.go
 
 ## The Environment
 
-The environment is defined in `compose.yml` to run with **Docker**, the are a **PostgresSQL** database and a **PG Admin**, to manage the database in address `localhost:8081`.
+### Install Docker
 
-To start the environment use:
+The environment was defined in `compose.yml` to run with **Docker**, the are a **PostgresSQL** database and a **PG Admin**, to manage the database in address `localhost:8081`.
+
+After installing **Docker** start the environment:
 
 ```sh
 docker compose start
@@ -22,16 +24,18 @@ Or if you want to see the log, but you will not be able to use the terminal at s
 docker compose up
 ```
 
-## Install Golang in Ubuntu
+### Install Golang
 
-Download Golang
+The project was developed using GO language. 
+
+Download Golang for Ubuntu
 
 ```sh
 curl -OL <https://go.dev/dl/go1.23.0.linux-amd64.tar.gz>
 sudo tar -C /usr/local -xvf go1.23.0.linux-amd64.tar.gz
 ```
 
-## Define Environment Variables
+#### Define Environment Variables
 
 Put on the end of the file
 
@@ -51,6 +55,7 @@ Check if it is working
 ```sh
 go version
 ```
+
 
 # Foundation - Development Steps
 
@@ -164,8 +169,12 @@ The API handle was created in the internal/api directory
 
 ## Add Chi
 
-github.com/go-chi/chi/v5
+```sh
+go get github.com/go-chi/chi/v5
+```
 
 ## Add Chi CORS 
 
-go get github.com/go-chi/cors
+```sh
+go get go get github.com/go-chi/cors
+```
