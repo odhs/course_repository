@@ -49,11 +49,11 @@ const getRoomMessages = `-- name: GetRoomMessages :many
 SELECT "id", "room_id", "message", "reaction_count", "answered"
 FROM messages
 WHERE
-  room_id = "$1"
+  room_id = $1
 `
 
-func (q *Queries) GetRoomMessages(ctx context.Context) ([]Message, error) {
-	rows, err := q.db.Query(ctx, getRoomMessages)
+func (q *Queries) GetRoomMessages(ctx context.Context, roomID uuid.UUID) ([]Message, error) {
+	rows, err := q.db.Query(ctx, getRoomMessages, roomID)
 	if err != nil {
 		return nil, err
 	}
