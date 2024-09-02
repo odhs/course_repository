@@ -19,9 +19,7 @@ func main() {
 		"--config",
 		"./internal/store/pgstore/migrations/tern.conf",
 	)
-
 	if err := cmd.Run(); err != nil {
 		panic(err)
 	}
-
 }

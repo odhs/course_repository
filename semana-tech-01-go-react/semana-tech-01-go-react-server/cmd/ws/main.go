@@ -6,10 +6,11 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"odhs/semana-tech-01-go-react-server-main/internal/api"
-	"odhs/semana-tech-01-go-react-server-main/internal/store/pgstore"
 	"os"
 	"os/signal"
+	
+	"odhs/semana-tech-01-go-react-server-main/internal/store/pgstore"
+	"odhs/semana-tech-01-go-react-server-main/internal/api"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"

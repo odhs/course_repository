@@ -1,5 +1,11 @@
 # Server Project Setup
 
+To run the project use:
+
+```sh
+go run cmd/ws/main.go
+```
+
 ## The Environment
 
 The environment is defined in `compose.yml` to run with **Docker**, the are a **PostgresSQL** database and a **PG Admin**, to manage the database in address `localhost:8081`.
