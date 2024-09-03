@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Message } from "../components/message";
-
-import amaLogo from "../assets/ama-logo.svg";
 import { ArrowRight, Share2 } from "lucide-react";
+
+import { Message } from "../components/message";
+import amaLogo from "../assets/ama-logo.svg";
 
 export function Room() {
   // Return all parameters from URL

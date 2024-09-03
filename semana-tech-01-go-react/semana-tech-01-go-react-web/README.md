@@ -87,7 +87,7 @@ To show messages to the user, -f because we are using React 19 and this version 
 npm i sonner -f
 ```
 
-## To start the application use
+## To start the application in _development mode_
 
 ```bs
 npm run dev

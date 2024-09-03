@@ -5,17 +5,15 @@ interface CreateRoomRequest {
 // API will return the room ID created.
 export async function createRoom({ theme }: CreateRoomRequest) {
   // Request
-  const response = await fetch("http://localhost:8080/api/", {
+  const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/rooms`, {
     method: "POST",
     body: JSON.stringify({
       theme,
     }),
   });
 
-  // Response in Type Script
   const data: { id: string } = await response.json();
-  // Response in Javascript
-  //const data: = await response.json();
-  
+
   return { roomId: data.id };
 }
+ 
