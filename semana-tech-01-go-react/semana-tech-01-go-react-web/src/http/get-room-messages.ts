@@ -1,5 +1,5 @@
 interface GetRoomMessagesRequest {
-  roomId: string;
+  roomId: string
 }
 
 // API will return the room ID created.
@@ -11,12 +11,12 @@ export async function getRoomMessages({ roomId }: GetRoomMessagesRequest) {
 
   // Response then defines the json response array
   const data: Array<{
-    id: string;
-    room_id: string;
-    message: string;
-    reaction_count: number;
-    answered: boolean;
-  }> = await response.json();
+    id: string
+    room_id: string
+    message: string
+    reaction_count: number
+    answered: boolean
+  }> = await response.json()
 
   // Returning with a map to rename some itens used in the frontend
   return {

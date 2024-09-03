@@ -1,5 +1,5 @@
 interface CreateRoomRequest {
-  theme: string;
+  theme: string
 }
 
 // API will return the room ID created.
