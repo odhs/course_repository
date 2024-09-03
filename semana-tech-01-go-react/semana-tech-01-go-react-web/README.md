@@ -4,7 +4,7 @@
 
 ### Vite
 
-```bs
+```sh
 npm create vite@latest
 ```
 
@@ -16,7 +16,7 @@ Select:
 
 Install Dependences
 
-```bs
+```sh
 npm i
 ```
 
@@ -24,7 +24,7 @@ npm i
 
 Add the CSS framework
 
-```bs
+```sh
 npm i tailwindcss postcss autoprefixer -D
 npx tailwindcss init -p
 ```
@@ -33,7 +33,7 @@ npx tailwindcss init -p
 
 Install the router
 
-```bs
+```sh
 npm i react-router-dom
 ```
 
@@ -41,15 +41,15 @@ npm i react-router-dom
 
 Add icons package
 
-```bs
+```sh
 npm i lucide-react
 ```
 
-### Migrating to React 19
+### Migrate to React 19
 
 To get the form parameters with new feature of React 19
 
-```bs
+```sh
 npm install --save-exact react@rc react-dom@rc
 ```
 
@@ -79,16 +79,22 @@ npm install --save-exact react@rc react-dom@rc
 
 4: Execute `npm i -f` to install everything
 
-### Instaling package Sonner to show a toaster
+### Install Sonner to show a toaster
 
 To show messages to the user, -f because we are using React 19 and this version is in release candidate yet. The function was added to the Sharing Button in Room page.
 
-```bs
+```sh
 npm i sonner -f
+```
+
+### Install QueryClient
+
+```sh
+npm i @tanstack/react-query -f
 ```
 
 ## To start the application in _development mode_
 
-```bs
+```sh
 npm run dev
 ```

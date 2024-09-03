@@ -2,8 +2,9 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowRight, Share2 } from "lucide-react";
 
-import { Message } from "../components/message";
 import amaLogo from "../assets/ama-logo.svg";
+import { Messages } from "../components/messages";
+import { Suspense } from "react";
 
 export function Room() {
   // Return all parameters from URL
@@ -59,11 +60,9 @@ export function Room() {
           <ArrowRight className="size-4" />
         </button>
       </form>
-
-      <ol className="list-decimal list-inside px-3 space-y-8">
-        <Message text="Example of Text 1" amountOfReactions={2} answered />
-        <Message text="Example of Text 2 " amountOfReactions={10} />
-      </ol>
+      <Suspense fallback={<p>Carregando...</p>}>
+        <Messages />
+      </Suspense>
     </div>
   );
 }

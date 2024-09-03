@@ -12,6 +12,7 @@ export async function createRoom({ theme }: CreateRoomRequest) {
     }),
   });
 
+  // Response
   const data: { id: string } = await response.json();
 
   return { roomId: data.id };
