@@ -1,26 +1,26 @@
-import { ArrowRight } from "lucide-react";
-import { useParams } from "react-router-dom";
-import { createMessage } from "../http/create-message";
-import { toast } from "sonner";
+import { ArrowRight } from "lucide-react"
+import { useParams } from "react-router-dom"
+import { createMessage } from "../http/create-message"
+import { toast } from "sonner"
 
 export function CreateMessageForm() {
-  const { roomId } = useParams();
+  const { roomId } = useParams()
 
   if (!roomId) {
-    throw new Error("Messages components must be used within room page");
+    throw new Error("Messages components must be used within room page")
   }
 
   async function createMessageAction(data: FormData) {
-    const message = data.get("message")?.toString();
+    const message = data.get("message")?.toString()
 
     if (!message || !roomId) {
-      return;
+      return
     }
 
     try {
-      await createMessage({ message, roomId });
+      await createMessage({ message, roomId })
     } catch {
-      toast.error("Falha ao enviar a pergunta, tente novamente!");
+      toast.error("Falha ao enviar a pergunta, tente novamente!")
     }
   }
 
@@ -46,5 +46,5 @@ export function CreateMessageForm() {
         <ArrowRight className="size-4" />
       </button>
     </form>
-  );
+  )
 }
