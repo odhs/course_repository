@@ -31,7 +31,8 @@ export function Messages() {
     }
 
     ws.onmessage = (event) => {
-      console.log(event)
+      const data = JSON.parse(event.data)
+      console.log(data)
     }
 
     return () => {
