@@ -1,14 +1,15 @@
-import { ArrowUp } from "lucide-react";
-import { useState } from "react";
+import { ArrowUp } from "lucide-react"
+import { useState } from "react"
 
 interface MessageProps {
-  text: string;
-  amountOfReactions: number;
-  answered?: boolean;
+  id: string,
+  text: string,
+  amountOfReactions: number,
+  answered?: boolean,
 }
 
 export function Message({ text, amountOfReactions, answered = false}: MessageProps) {
-  const [hasReacted, setHasReacted] = useState(false);
+  const [hasReacted, setHasReacted] = useState(false)
 
   function handleReactToMessage() {
     setHasReacted(true);
