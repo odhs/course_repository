@@ -3,7 +3,14 @@
 To run the project use:
 
 ```sh
+docker compose start
 go run cmd/ws/main.go
+```
+
+Or use the file run.sh
+
+```sh
+./run.sh
 ```
 
 ## The Environment
@@ -26,7 +33,7 @@ docker compose up
 
 ### Install Golang
 
-The project was developed using GO language. 
+The server-side project was developed using GO language. 
 
 Download Golang for Ubuntu
 
@@ -37,7 +44,7 @@ sudo tar -C /usr/local -xvf go1.23.0.linux-amd64.tar.gz
 
 #### Define Environment Variables
 
-Put on the end of the file
+Put on the end of the file `~/.profile`
 
 ```sh
 export PATH=$PATH:~/go/bin
@@ -144,7 +151,7 @@ the file `./internal/pgstore/queries/queries.sql` with the content:
 SELECT "id", "theme" FROM rooms WHERE id = $id;
 ```
 
-Other SQL was added laterin the queries.sql
+Other SQL was added later in the queries.sql
 
 3. Run SQLC
 
