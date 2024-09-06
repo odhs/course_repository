@@ -1,15 +1,15 @@
-import { ArrowUp } from "lucide-react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { createMessageReaction } from "../http/create-message-reaction";
-import { toast } from "sonner";
-import { removeMessageReaction } from "../http/remove-message-reaction";
+import { ArrowUp } from "lucide-react"
+import { useState } from "react"
+import { useParams } from "react-router-dom"
+import { createMessageReaction } from "../http/create-message-reaction"
+import { toast } from "sonner"
+import { removeMessageReaction } from "../http/remove-message-reaction"
 
 interface MessageProps {
-  id: string;
-  text: string;
-  amountOfReactions: number;
-  answered?: boolean;
+  id: string
+  text: string
+  amountOfReactions: number
+  answered?: boolean
 }
 
 export function Message({
@@ -22,6 +22,7 @@ export function Message({
   const [hasReacted, setHasReacted] = useState(false)
 
   async function createMessageReactionAction() {
+
     if (!roomId) {
       return;
     }
@@ -35,6 +36,7 @@ export function Message({
   }
 
   async function removeMessageReactionAction() {
+
     if (!roomId) {
       return;
     }
