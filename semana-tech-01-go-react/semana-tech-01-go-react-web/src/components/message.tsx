@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react"
+import { ThumbsDown, ThumbsUp } from "lucide-react"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { createMessageReaction } from "../http/create-message-reaction"
@@ -61,7 +61,7 @@ export function Message({
           onClick={removeMessageReactionAction}
           className="mt-3 flex items-center gap-2 text-orange-400 text-sm font-medium hover:text-orange-500"
         >
-          <ArrowUp className="size-4" />
+          <ThumbsUp className="size-4" />
           Descurtir pergunta ({amountOfReactions})
         </button>
       ) : (
@@ -70,7 +70,7 @@ export function Message({
           onClick={createMessageReactionAction}
           className="mt-3 flex items-center gap-2 text-zinc-400 text-sm font-medium hover:text-zinc-300"
         >
-          <ArrowUp className="size-4" />
+          <ThumbsDown className="size-4" />
           Curtir pergunta ({amountOfReactions})
         </button>
       )}
