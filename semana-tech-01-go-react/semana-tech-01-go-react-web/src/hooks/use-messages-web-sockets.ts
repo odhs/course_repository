@@ -6,6 +6,12 @@ interface UseMessagesWebSocketsParams {
   roomId: string;
 }
 
+type WebHookMessage =
+| {kind: "message_created"; value: {id: string, message: string}}
+| {kind: "message_answered"; value: {id: string}}
+| {kind: "message_reaction_increased"; value: {id: string, count: number}}
+| {kind: "message_reaction_decreased"; value: {id: string, count: number}}
+
 export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
   const queryClient = useQueryClient();
 
@@ -25,15 +31,7 @@ export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
     };
 
     ws.onmessage = (event) => {
-      const data: {
-        // filtros
-        kind:
-          | "message_created"
-          | "message_answered"
-          | "message_reaction_increased"
-          | "message_reaction_decreased";
-        value: any;
-      } = JSON.parse(event.data);
+      const data: WebHookMessage = JSON.parse(event.data);
 
       console.log(data);
 
