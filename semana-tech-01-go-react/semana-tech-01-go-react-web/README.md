@@ -11,7 +11,7 @@ npm create vite@latest
 Select:
 
 - web
-- REACT
+- React
 - Typescript
 
 Install Dependences
@@ -93,8 +93,18 @@ npm i sonner -f
 npm i @tanstack/react-query -f
 ```
 
-## To start the application in _development mode_
+## Run
+
+### To start the application in _development mode_
 
 ```sh
 npm run dev
 ```
+
+### To start the application to preview in entire network
+
+```sh
+npm run expose
+```
+
+PS: I added the line `"expose": "npm run dev -- --host"` into the term `scripts` in the file `package.json` to test the application on my network, this line permits that other computers or mobiles can access the website in a same network, for example, a Wifi network.
