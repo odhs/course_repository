@@ -2,11 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import type { GetRoomMessagesResponse } from "../http/get-room-messages";
 
-interface UseMessagesWebsocketParams {
+interface UseMessagesWebSocketsParams {
   roomId: string;
 }
 
-export function useMessagesWebsocket({ roomId }: UseMessagesWebsocketParams) {
+export function useMessagesWebSockets({ roomId }: UseMessagesWebSocketsParams) {
   const queryClient = useQueryClient();
 
   // Real Time part using Websockts
